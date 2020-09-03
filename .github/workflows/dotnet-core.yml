@@ -1,0 +1,51 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.401
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1  
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: List out directory contents
+      run: |
+          echo "Listing the contents of the GitHub workspace directory"
+          ls ${{ github.workspace }}
+          echo "Recursively listing all contents of the current directory"
+          ls -R
+    - name: Test
+      run: dotnet test ${{ github.workspace }}/AnimalAdoption.Web.Portal.UnitTests/AnimalAdoption.Web.Portal.UnitTests.csproj --no-restore --verbosity normal   
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.1.4
+      with:
+        name: netcoreapp3.1
+        path: ${{ github.workspace }}/AnimalAdoption.Web.Portal/obj/Release/*
+    - name: MSBuild Pack
+      run: msbuild ${{ github.workspace }}/AnimalAdoption.Common.Logic/AnimalAdoption.Common.Logic.csproj /p:Configuration="Release" /t:pack
+    - name: Nuget Pack
+      run: nuget pack ${{ github.workspace }}/AnimalAdoption.Common.Logic -properties Configuration=Release
+    - name: Nuget Add Source
+      run: nuget source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/declan91/index.json" -UserName declan91 -Password ${{ secrets.ANIMAL_ADOPTION_PAT }}
+    - name: Nuget SetAPIKey
+      run: nuget setApiKey ${{ secrets.ANIMAL_ADOPTION_PAT }} -Source "Github"
+    - name: Nuget Push
+      run: nuget push ${{ github.workspace }}\*.nupkg -Source "GitHub"
+    
