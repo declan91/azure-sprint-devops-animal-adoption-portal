@@ -47,5 +47,5 @@ jobs:
     - name: Nuget SetAPIKey
       run: nuget setApiKey ${{ secrets.ANIMAL_ADOPTION_PAT }} -Source "Github"
     - name: Nuget Push
-      run: nuget push ${{ github.workspace }}/AnimalAdoption.Common.Logic/bin/Release/*.nupkg -Source "GitHub"
+      run: nuget push ${{ github.workspace }}/azure-sprint-devops-animal-adoption-portal/azure-sprint-devops-animal-adoption-portal/*.nupkg -Source "GitHub"
     
