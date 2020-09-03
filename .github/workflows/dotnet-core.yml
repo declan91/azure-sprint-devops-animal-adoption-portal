@@ -1,52 +1,38 @@
 name: .NET Core
-
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
-
 jobs:
   build:
-    runs-on: windows-latest
-
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.401
-    - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
-    - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1  
-    - name: Install dependencies
+        dotnet-version: 3.1.301
+        source-url: https://nuget.pkg.github.com/declan91/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.ANIMAL_ADOPTION_PAT }}
+    - name: Install dependencies for all projects
       run: dotnet restore
-    - name: Build
+    - name: Build all projects
       run: dotnet build --configuration Release --no-restore
-    - name: List out directory contents
-      run: |
-          echo "Listing the contents of the GitHub workspace directory"
-          ls ${{ github.workspace }}
-          echo "Recursively listing all contents of the current directory"
-          ls -R
-    - name: Test
-      run: dotnet test ${{ github.workspace }}/AnimalAdoption.Web.Portal.UnitTests/AnimalAdoption.Web.Portal.UnitTests.csproj --no-restore --verbosity normal   
+    - name: Run unit tests
+      run: dotnet test ${{ github.workspace }}/AnimalAdoption.Web.Portal.UnitTests/AnimalAdoption.Web.Portal.UnitTests.csproj --no-build --verbosity normal --configuration Release
+    - name: Pack the CommonLogic project for NuGet
+      run: dotnet pack ${{ github.workspace }}/AnimalAdoption.Common.Logic/AnimalAdoption.Common.Logic.csproj --configuration Release --no-build -p:PackageVersion=${{ env.PKG_VERSION }} --output .
+      env:
+        PKG_VERSION: 1.0.22
+    - name: Push the CommonLogic NuGet package
+      run: dotnet nuget push *.nupkg --skip-duplicate
+    - name: Publish portal project in Release mode
+      run: dotnet publish ${{ github.workspace }}/AnimalAdoption.Web.Portal/AnimalAdoption.Web.Portal.csproj --configuration Release --no-build --output ./taa-portal/
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.1.4
+      uses: actions/upload-artifact@v2.1.3
       with:
-        name: netcoreapp3.1
-        path: ${{ github.workspace }}/AnimalAdoption.Web.Portal/obj/Release/*
-    - name: MSBuild Pack
-      run: dotnet pack ${{ github.workspace }}/AnimalAdoption.Common.Logic/AnimalAdoption.Common.Logic.csproj /p:Configuration="Release" /t:pack
-    #- name: Nuget Pack
-     # run: nuget pack ${{ github.workspace }}/AnimalAdoption.Common.Logic -properties Configuration=Release
-    - name: Nuget Add Source
-      run: dotnet nuget add source https://nuget.pkg.github.com/declan91/index.json -n github -u declan91 -p ${{ secrets.ANIMAL_ADOPTION_PAT }}
-    - name: Nuget SetAPIKey
-      run: nuget setApiKey ${{ secrets.ANIMAL_ADOPTION_PAT }} -Source "github"
-    - name: Nuget Push
-      run: dotnet nuget push *.nupkg -s "github"
-      #run: dotnet nuget push "bin/Release/*.nupkg" --source "github"
-    
+        name: drop
+        path:  ${{ github.workspace }}\taa-portal\
+        if-no-files-found: error
