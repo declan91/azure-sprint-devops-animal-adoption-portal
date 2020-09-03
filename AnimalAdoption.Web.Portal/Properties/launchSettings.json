@@ -3,8 +3,12 @@
     "windowsAuthentication": false, 
     "anonymousAuthentication": true,
     "iisExpress": {
+      "launchBrowser": true,
       "applicationUrl": "http://localhost:9000",
-      "sslPort": 44390
+      "sslPort": 44390,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   },
   "profiles": {

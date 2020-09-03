@@ -10,6 +10,7 @@ namespace AnimalAdoption.Common.Logic
         {
             return new string[]
             {
+                "ferret",
                 "pencil",
                 "flower",
                 "icecream",
@@ -25,6 +26,9 @@ namespace AnimalAdoption.Common.Logic
             string name = "";
             switch (id)
             {
+                case "ferret":
+                    name = "Merret";
+                    break;
                 case "pencil":
                     name = "Charlie";
                     break;
@@ -41,7 +45,10 @@ namespace AnimalAdoption.Common.Logic
                     name = "Murphy";
                     break;
                 case "placeholder":
-                    name = "Placeholder";
+                    name = "Merret";
+                    break;
+                default:
+                    name = "Merret";
                     break;
             }
             return name;
