@@ -40,8 +40,8 @@ jobs:
         path: ${{ github.workspace }}/AnimalAdoption.Web.Portal/obj/Release/*
     - name: MSBuild Pack
       run: dotnet pack ${{ github.workspace }}/AnimalAdoption.Common.Logic/AnimalAdoption.Common.Logic.csproj /p:Configuration="Release" /t:pack
-    - name: Nuget Pack
-      run: nuget pack ${{ github.workspace }}/AnimalAdoption.Common.Logic -properties Configuration=Release
+    #- name: Nuget Pack
+     # run: nuget pack ${{ github.workspace }}/AnimalAdoption.Common.Logic -properties Configuration=Release
     - name: Nuget Add Source
       run: dotnet nuget add source https://nuget.pkg.github.com/declan91/index.json -n github -u declan91 -p ${{ secrets.ANIMAL_ADOPTION_PAT }}
     - name: Nuget SetAPIKey
