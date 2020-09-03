@@ -48,6 +48,6 @@ jobs:
     - name: Nuget SetAPIKey
       run: nuget setApiKey ${{ secrets.ANIMAL_ADOPTION_PAT }} -Source "Github"
     - name: Nuget Push
-      #run: nuget push ${{ github.workspace }}\*.nupkg -Source "GitHub"
-      run: dotnet nuget push "bin/Release/*.nupkg" --source "github"
+      run: nuget push ${{ github.workspace }}\*.nupkg -Source "GitHub"
+      #run: dotnet nuget push "bin/Release/*.nupkg" --source "github"
     
