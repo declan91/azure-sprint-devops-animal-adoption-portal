@@ -39,7 +39,7 @@ jobs:
         name: netcoreapp3.1
         path: ${{ github.workspace }}/AnimalAdoption.Web.Portal/obj/Release/*
     - name: MSBuild Pack
-      run: msbuild ${{ github.workspace }}/AnimalAdoption.Common.Logic/AnimalAdoption.Common.Logic.csproj /p:Configuration="Release" /t:pack
+      run: dotnet pack ${{ github.workspace }}/AnimalAdoption.Common.Logic/AnimalAdoption.Common.Logic.csproj /p:Configuration="Release" /t:pack
     - name: Nuget Pack
       run: nuget pack ${{ github.workspace }}/AnimalAdoption.Common.Logic -properties Configuration=Release
     - name: Nuget Add Source
