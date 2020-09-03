@@ -34,5 +34,5 @@ jobs:
       uses: actions/upload-artifact@v2.1.3
       with:
         name: drop
-        path:  ${{ github.workspace }}\taa-portal\
+        path:  ${{ github.workspace }}/taa-portal/
         if-no-files-found: error
