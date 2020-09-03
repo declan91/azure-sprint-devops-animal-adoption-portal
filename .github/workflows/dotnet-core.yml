@@ -26,5 +26,12 @@ jobs:
 
           echo "Recursively listing all contents of the current directory"
           ls -R
-        
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.1.4
+      with:
+        # Artifact name
+        name: netcoreapp3.1
+        # A file, directory or wildcard pattern that describes what to upload
+        path: ./AnimalAdoption.Web.Portal.UnitTests/obj/Release/*
+        # The desired behavior if no files are found using the provided path
         
