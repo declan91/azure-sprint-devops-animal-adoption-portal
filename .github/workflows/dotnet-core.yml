@@ -45,8 +45,8 @@ jobs:
     - name: Nuget Add Source
       run: dotnet nuget add source https://nuget.pkg.github.com/declan91/index.json -n github -u declan91 -p ${{ secrets.ANIMAL_ADOPTION_PAT }}
     - name: Nuget SetAPIKey
-      run: nuget setApiKey ${{ secrets.ANIMAL_ADOPTION_PAT }} -Source "Github"
+      run: nuget setApiKey ${{ secrets.ANIMAL_ADOPTION_PAT }} -Source "github"
     - name: Nuget Push
-      run: dotnet nuget push ${{ github.workspace }}\*.nupkg -Source "GitHub"
+      run: dotnet nuget push *.nupkg -Source "github"
       #run: dotnet nuget push "bin/Release/*.nupkg" --source "github"
     
