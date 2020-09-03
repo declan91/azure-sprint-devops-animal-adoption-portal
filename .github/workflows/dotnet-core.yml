@@ -44,7 +44,7 @@ jobs:
       run: nuget pack ${{ github.workspace }}/AnimalAdoption.Common.Logic -properties Configuration=Release
     - name: Nuget Add Source
       #run: nuget source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/declan91/index.json" -UserName declan91 -Password ${{ secrets.ANIMAL_ADOPTION_PAT }}
-      run: dotnet nuget add source https://nuget.pkg.github.com/declan91/index.json -n github -u declan91 -p ${{ secrets.ANIMAL_ADOPTION_PAT }}
+      run: dotnet nuget source Add -Source "https://nuget.pkg.github.com/declan91/index.json" -Name "GitHub" -UserName declan91 -Password ${{ secrets.ANIMAL_ADOPTION_PAT }}
     - name: Nuget SetAPIKey
       run: nuget setApiKey ${{ secrets.ANIMAL_ADOPTION_PAT }} -Source "Github"
     - name: Nuget Push
