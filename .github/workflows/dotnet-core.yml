@@ -28,4 +28,4 @@ jobs:
         path: ./AnimalAdoption.Web.Portal/obj/Release/*
         # The desired behavior if no files are found using the provided path
     - name: Test
-      run: dotnet test ${{ github.workspace }}/AnimalAdoption.Web.Portal.UnitTests/Web.Portal.UnitTests.csproj --no-restore --verbosity normal   
+      run: dotnet test ./AnimalAdoption.Web.Portal.UnitTests/Web.Portal.UnitTests.csproj --no-restore --verbosity normal   
