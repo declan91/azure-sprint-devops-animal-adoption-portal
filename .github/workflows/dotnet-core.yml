@@ -43,15 +43,9 @@ jobs:
     
     runs-on: ubuntu-latest
     steps:
-    - name: 'Checkout Github Master' 
-      uses: actions/checkout@master
-      
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.301 
     - uses: actions/download-artifact@v2
       with:
+        name: drop
         path: ./taa-portal/
     
     - name: 'Run Azure webapp deploy action using publish profile credentials'
